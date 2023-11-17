@@ -31,7 +31,7 @@ spring.jpa.properties.hibernate.diatect=org.hibernate.dialect.MySQL8InnoDBDialec
 
 # 3. API Testing
 
-## Add new user: `[POST]: http://localhost:8080/auth/add`
+## Register: `[POST]: http://localhost:8080/auth/register`
 
 ```php
 {
@@ -42,7 +42,7 @@ spring.jpa.properties.hibernate.diatect=org.hibernate.dialect.MySQL8InnoDBDialec
 }
 ```
 
-## Add new user: `[POST]: http://localhost:8080/auth/generateToken`
+## Login: `[POST]: http://localhost:8080/auth/login`
 
 ```php
 {
@@ -51,22 +51,32 @@ spring.jpa.properties.hibernate.diatect=org.hibernate.dialect.MySQL8InnoDBDialec
 }
 ```
 
-## Get user profile: `[GET]: http://localhost:8080/auth/user`
+## Get user profile: `[GET]: http://localhost:8080/auth/profile`
 
 **Header: Bearer generateToken**
 
 ```php
 {
-  "Authorization": Bearer token,
+  "Authorization": Bearer token
 }
 ```
 
-## Get user profile: `[GET]: http://localhost:8080/auth/admin`
+## Check user role: `[GET]: http://localhost:8080/auth/user`
 
 **Header: Bearer generateToken**
 
 ```php
 {
-  "Authorization": Bearer token,
+  "Authorization": Bearer token
+}
+```
+
+## Check admin role: `[GET]: http://localhost:8080/auth/admin`
+
+**Header: Bearer generateToken**
+
+```php
+{
+  "Authorization": Bearer token
 }
 ```

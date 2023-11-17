@@ -17,13 +17,18 @@ import com.demo.security.models.UserInfoDetails;
 import com.demo.security.repositories.ResponseObject;
 import com.demo.security.repositories.UserRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository repository; 
 
     @Autowired
-    private PasswordEncoder encoder; 
+    private PasswordEncoder encoder;
+    
+    @Autowired
+    private JwtService jwtService; 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { 
@@ -52,6 +57,35 @@ public class UserService implements UserDetailsService {
         repository.save(user); 
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("201", "Add new user successfully", user)
+            );
+    }
+
+    public ResponseEntity<ResponseObject> getUserProfile(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        String token = null; 
+        String username = null;
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) { 
+            token = authHeader.substring(7); 
+            username = jwtService.extractUsername(token); 
+        }
+        
+        if(username == "") {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                new ResponseObject("401", "Unauthorized ", null)
+            );
+        }
+
+        Optional<UserEntity> targetUser = repository.findByUsername(username);
+
+        if(!targetUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("404", "User not found", null)
+            );
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("200", "Get user profile successfully", targetUser)
             );
     }
 }

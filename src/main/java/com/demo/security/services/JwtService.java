@@ -6,8 +6,12 @@ import java.util.HashMap;
 import java.util.Map; 
 import java.util.function.Function;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.demo.security.repositories.ResponseObject;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,10 +21,14 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtService {
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437"; 
-    public String generateToken(String userName) { 
-        Map<String, Object> claims = new HashMap<>(); 
-        return createToken(claims, userName); 
+    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+
+    public ResponseEntity<ResponseObject> generateToken(String userName) { 
+        Map<String, Object> claims = new HashMap<>();
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            new ResponseObject("200", "Generate token successfully", createToken(claims, userName))
+            ); 
     } 
   
     private String createToken(Map<String, Object> claims, String userName) { 
