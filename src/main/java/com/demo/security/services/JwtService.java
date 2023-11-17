@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.demo.security.models.Token;
 import com.demo.security.repositories.ResponseObject;
 
 import io.jsonwebtoken.Claims;
@@ -26,17 +27,21 @@ public class JwtService {
     public ResponseEntity<ResponseObject> generateToken(String userName) { 
         Map<String, Object> claims = new HashMap<>();
 
+        // accessToken: 20 second
+        // refreshToken: 1 minutes
+        Token token = new Token(createToken(claims, userName, 20000), createToken(claims, userName, 60000));
+
         return ResponseEntity.status(HttpStatus.OK).body(
-            new ResponseObject("200", "Generate token successfully", createToken(claims, userName))
+            new ResponseObject("200", "Generate token successfully", token)
             ); 
     } 
   
-    private String createToken(Map<String, Object> claims, String userName) { 
+    public String createToken(Map<String, Object> claims, String userName, int time) {
         return Jwts.builder() 
                 .setClaims(claims) 
                 .setSubject(userName) 
                 .setIssuedAt(new Date(System.currentTimeMillis())) 
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) 
+                .setExpiration(new Date(System.currentTimeMillis() + time)) // (convert time -> ms) 
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact(); 
     } 
   

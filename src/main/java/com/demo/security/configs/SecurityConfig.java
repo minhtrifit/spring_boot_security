@@ -64,8 +64,10 @@ public class SecurityConfig {
             auth.requestMatchers("/**").permitAll()
                 .requestMatchers("/auth", "/auth/all", "/auth/register", "/auth/login").permitAll()
                 .requestMatchers("/auth/profile").authenticated()
+                .requestMatchers("/auth/refresh").authenticated()
                 .requestMatchers("/auth/user/**").authenticated()
-                .requestMatchers("/auth/admin/**").authenticated()   
+                .requestMatchers("/auth/admin/**").authenticated()
+                .requestMatchers("/error").permitAll()   
                 .anyRequest().authenticated()
             );
         

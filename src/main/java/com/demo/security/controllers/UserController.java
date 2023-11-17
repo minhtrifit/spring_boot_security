@@ -60,6 +60,12 @@ public class UserController {
             throw new UsernameNotFoundException("invalid user request!"); 
         } 
     }
+
+    @PostMapping("/refresh")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')") 
+    public ResponseEntity<ResponseObject> refreshAccessToken(HttpServletRequest request) { 
+        return userService.refreshAccessToken(request);
+    }
     
     @GetMapping("/public") 
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
