@@ -51,6 +51,16 @@ spring.jpa.properties.hibernate.diatect=org.hibernate.dialect.MySQL8InnoDBDialec
 }
 ```
 
+## Refresh: `[POST]: http://localhost:8080/auth/refresh`
+
+**Header: Bearer generateToken**
+
+```php
+{
+  "Authorization": Bearer accessToken
+}
+```
+
 ## Get user profile: `[GET]: http://localhost:8080/auth/profile`
 
 **Header: Bearer generateToken**
